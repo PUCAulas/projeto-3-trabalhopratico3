@@ -1,8 +1,8 @@
 package main.java;
 
-//Classe para livros
-public class Livro extends ItemBiblioteca {
-    public Livro(String titulo, String autor, int anoPublicacao, boolean emprestavel, int quantidadeExemplares) {
+//Classe para revistas
+public class Revista extends ItemBiblioteca {
+    public Revista(String titulo, String autor, int anoPublicacao, boolean emprestavel, int quantidadeExemplares) {
         super(titulo, autor, anoPublicacao, emprestavel, quantidadeExemplares);
         this.emprestavel = emprestavel;
         this.quantidadeExemplares = quantidadeExemplares;
@@ -10,32 +10,31 @@ public class Livro extends ItemBiblioteca {
 
     @Override
     public String getTipo() {
-        return "Livro";
+        return "Revista";
     }
     
     @Override
     public boolean isEmprestavel() {
-        return emprestavel;
+    return emprestavel;
     }
 
     @Override
     public void setEmprestavel(boolean emprestavel) {
-        this.emprestavel = emprestavel;
+    this.emprestavel = emprestavel;
     }
 
     @Override
     public int getQuantidadeExemplares() {
-        return quantidadeExemplares;
+    return quantidadeExemplares;
     }
 
     @Override
     public void setQuantidadeExemplares(int quantidadeExemplares) {
-        this.quantidadeExemplares = quantidadeExemplares;
+    this.quantidadeExemplares = quantidadeExemplares;
     }
     
     @Override
     public String toString() {
-        return "Livro - " + super.toString() + ", Emprestável: " + emprestavel + ", Quantidade de Exemplares: " + quantidadeExemplares;
+        return "Revista - " + super.toString() + ", Emprestável: " + emprestavel + ", Quantidade de Exemplares: " + quantidadeExemplares;
     }
 }
-
