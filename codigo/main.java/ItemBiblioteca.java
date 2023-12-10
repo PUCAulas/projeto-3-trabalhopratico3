@@ -1,5 +1,8 @@
 package main.java;
 
+import java.util.Collection;
+import java.util.Set;
+
 //Classe base para itens de biblioteca
 abstract class ItemBiblioteca implements Comparable<ItemBiblioteca> {
 	protected String titulo;
@@ -97,4 +100,7 @@ abstract class ItemBiblioteca implements Comparable<ItemBiblioteca> {
     public void setExemplaresDisponiveis(int exemplaresDisponiveis) {
         this.exemplaresDisponiveis = exemplaresDisponiveis;
     }
+
+    public abstract Set<String> getCategorias();
+
 }
