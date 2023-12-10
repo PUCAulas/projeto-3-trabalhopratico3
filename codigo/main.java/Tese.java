@@ -1,5 +1,8 @@
 package main.java;
 
+import java.util.HashSet;
+import java.util.Set;
+
 //Classe para teses
 public class Tese extends ItemBiblioteca {
     public Tese(String titulo, String autor, int anoPublicacao, boolean emprestavel, int quantidadeExemplares) {
@@ -36,5 +39,14 @@ public class Tese extends ItemBiblioteca {
     @Override
     public String toString() {
         return "Tese - " + super.toString() + ", Emprestável: " + emprestavel + ", Quantidade de Exemplares: " + quantidadeExemplares;
+    }
+    
+ // Implementação do método abstrato getCategorias para Tese
+    @Override
+    public Set<String> getCategorias() {
+        // Lógica para obter categorias específicas de Tese
+        Set<String> categorias = new HashSet<>();
+        categorias.add("Acadêmico"); 
+        return categorias;
     }
 }
