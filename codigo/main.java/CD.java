@@ -58,7 +58,7 @@ public class CD extends ItemBiblioteca implements Emprestavel {
     public Set<String> getCategorias() {
         // Lógica para obter categorias específicas de CD
         Set<String> categorias = new HashSet<>();
-        categorias.add("Música"); // Exemplo, substitua com suas categorias reais
+        categorias.add("Música"); //
         return categorias;
     }
 }
