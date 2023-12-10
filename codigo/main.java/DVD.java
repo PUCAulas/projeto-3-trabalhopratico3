@@ -1,5 +1,8 @@
 package main.java;
 
+import java.util.HashSet;
+import java.util.Set;
+
 //Classe para DVDs
 public class DVD extends ItemBiblioteca implements Emprestavel {
     public DVD(String titulo, String autor, int anoPublicacao, boolean emprestavel, int quantidadeExemplares) {
@@ -49,4 +52,13 @@ public class DVD extends ItemBiblioteca implements Emprestavel {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	// Implementação do método abstrato getCategorias para DVD
+    @Override
+    public Set<String> getCategorias() {
+        // Lógica para obter categorias específicas de DVD
+        Set<String> categorias = new HashSet<>();
+        categorias.add("Filme"); 
+        return categorias;
+    }
 }
