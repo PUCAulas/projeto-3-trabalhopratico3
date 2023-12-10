@@ -1,5 +1,8 @@
 package main.java;
 
+import java.util.HashSet;
+import java.util.Set;
+
 //Classe para livros
 public class Livro extends ItemBiblioteca {
     public Livro(String titulo, String autor, int anoPublicacao, boolean emprestavel, int quantidadeExemplares) {
@@ -36,6 +39,15 @@ public class Livro extends ItemBiblioteca {
     @Override
     public String toString() {
         return "Livro - " + super.toString() + ", Emprestável: " + emprestavel + ", Quantidade de Exemplares: " + quantidadeExemplares;
+    }
+    
+ // Implementação do método abstrato getCategorias para Livro
+    @Override
+    public Set<String> getCategorias() {
+        // Lógica para obter categorias específicas de Livro
+        Set<String> categorias = new HashSet<>();
+        categorias.add("Literatura"); 
+        return categorias;
     }
 }
 
