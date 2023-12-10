@@ -1,6 +1,7 @@
 package main.java;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -9,16 +10,41 @@ import java.util.Scanner;
 
 //Classe principal que contém o menu
 public class SistemaBiblioteca {
+	private static SistemaBiblioteca instancia;  // Campo estático
 	private Map<String, ItemBiblioteca> acervo;
     private List<Usuario> usuarios;
     private Scanner scanner;
-
-    public SistemaBiblioteca() {
+    
+    private SistemaBiblioteca() {
+        // Construtor privado para evitar a criação direta de instâncias
         this.acervo = new HashMap<>();
         this.usuarios = new ArrayList<>();
         scanner = new Scanner(System.in);
     }
+
+    public static SistemaBiblioteca getInstance() {
+        if (instancia == null) {
+            instancia = new SistemaBiblioteca();
+        }
+        return instancia;
+    }
    
+    private String obterTipoItem(int opcao) {
+        switch (opcao) {
+            case 1:
+                return "livro";
+            case 2:
+                return "tese";
+            case 3:
+                return "cd";
+            case 4:
+                return "dvd";
+            case 5:
+                return "revista";
+            default:
+                throw new IllegalArgumentException("Opção de tipo de item inválida: " + opcao);
+        }
+    }
 
     public void adicionarItem(ItemBiblioteca item) {
         acervo.put(item.titulo, item);
@@ -26,6 +52,24 @@ public class SistemaBiblioteca {
 
     public void adicionarUsuario(Usuario usuario) {
         usuarios.add(usuario);
+    }
+    
+ // Factory Method para criar instâncias de ItemBiblioteca
+    public ItemBiblioteca criarItemBiblioteca(String tipo, String titulo, String autor, int anoPublicacao, boolean emprestavel, int quantidadeExemplares) {
+        switch (tipo.toLowerCase()) {
+            case "livro":
+                return new Livro(titulo, autor, anoPublicacao, emprestavel, quantidadeExemplares);
+            case "tese":
+                return new Tese(titulo, autor, anoPublicacao, emprestavel, quantidadeExemplares);
+            case "cd":
+                return new CD(titulo, autor, anoPublicacao, emprestavel, quantidadeExemplares);
+            case "dvd":
+                return new DVD(titulo, autor, anoPublicacao, emprestavel, quantidadeExemplares);
+            case "revista":
+                return new Revista(titulo, autor, anoPublicacao, emprestavel, quantidadeExemplares);
+            default:
+                throw new IllegalArgumentException("Tipo de item desconhecido: " + tipo);
+        }
     }
 
     public void menuPrincipal() {
@@ -58,6 +102,7 @@ public class SistemaBiblioteca {
                     break;
                 case 5:
                     emitirRelatorios();  // Requisito e
+                    gerarRecomendacoes();
                     break;
                 case 0:
                     System.out.println("/Saindo do sistema. Até logo!");
@@ -127,32 +172,12 @@ public class SistemaBiblioteca {
         System.out.println("3. CD");
         System.out.println("4. DVD");
         System.out.println("5. Revista");
-        
+
         System.out.print("Escolha uma opção: ");
         int tipoItem = scanner.nextInt();
 
-        ItemBiblioteca novoItem = null;
-
-        switch (tipoItem) {
-            case 1:
-                novoItem = new Livro(titulo, autor, anoPublicacao, emprestavel, quantidadeExemplares);
-                break;
-            case 2:
-                novoItem = new Tese(titulo, autor, anoPublicacao, emprestavel, quantidadeExemplares);
-                break;
-            case 3:
-                novoItem = new CD(titulo, autor, anoPublicacao, emprestavel, quantidadeExemplares);
-                break;
-            case 4:
-                novoItem = new DVD(titulo, autor, anoPublicacao, emprestavel, quantidadeExemplares);
-                break;
-            case 5:
-                novoItem = new Revista(titulo, autor, anoPublicacao, emprestavel, quantidadeExemplares);
-                break;
-            default:
-                System.out.println("Opção inválida. Item não cadastrado.");
-                return;
-        }
+        // Usando o Factory Method para criar a instância de ItemBiblioteca
+        ItemBiblioteca novoItem = criarItemBiblioteca(obterTipoItem(tipoItem), titulo, autor, anoPublicacao, emprestavel, quantidadeExemplares);
 
         // Adicionar o novo item ao acervo
         adicionarItem(novoItem);
@@ -471,6 +496,7 @@ public class SistemaBiblioteca {
 
     // Lógica para realizar empréstimos
     private void realizarEmprestimo() {
+    	try {
         System.out.print("Digite o nome do usuário: ");
         String nomeUsuario = scanner.nextLine();
 
@@ -500,6 +526,22 @@ public class SistemaBiblioteca {
             }
         } else {
             System.out.println("Usuário não encontrado ou não pode pegar mais empréstimos.");
+        }
+        
+        if (usuario != null && usuario.podePegarEmprestado()) {
+            // ... (código existente)
+        } else {
+            throw new EmprestimoException("Não foi possível realizar o empréstimo.");
+        }
+    } catch (EmprestimoException e) {
+        System.out.println("Erro ao tentar realizar o empréstimo: " + e.getMessage());
+    }
+    }
+    
+    //Classe EmprestimoException para representar exceções relacionadas a empréstimos
+    public class EmprestimoException extends Exception {
+        public EmprestimoException(String message) {
+            super(message);
         }
     }
 
@@ -581,9 +623,57 @@ public class SistemaBiblioteca {
             System.out.println(usuario + " - Itens emprestados: " + usuario.getItensEmprestados());
         }
     }
+    
+    private void gerarRecomendacoes() {
+        System.out.println("\n------ Recomendações ------");
+
+        for (Usuario usuario : usuarios) {
+            System.out.println("Recomendações para " + usuario.getNome() + ":");
+
+            // Lógica para gerar recomendações com base nas declarações do usuário, histórico e curso
+            List<ItemBiblioteca> recomendacoes = obterRecomendacoes(usuario);
+
+            if (!recomendacoes.isEmpty()) {
+                for (ItemBiblioteca recomendacao : recomendacoes) {
+                    System.out.println(recomendacao);
+                }
+            } else {
+                System.out.println("Nenhuma recomendação disponível.");
+            }
+
+            System.out.println();
+        }
+    }
+
+    private List<ItemBiblioteca> obterRecomendacoes(Usuario usuario) {
+        List<ItemBiblioteca> recomendacoes = new ArrayList<>();
+
+        // Verificar histórico do usuário e suas categorias de interesse
+        for (ItemBiblioteca item : acervo.values()) {
+            // Verificar se o item não foi emprestado pelo usuário
+            if (!usuario.getItensEmprestados().contains(item)) {
+                // Verificar se o curso do usuário coincide com o tipo do item
+                if (usuario.getCurso() != null && item.getTipo().toLowerCase().contains(usuario.getCurso().toLowerCase())) {
+                    recomendacoes.add(item);
+                }
+
+                // Verificar se o item pertence a alguma categoria de interesse do usuário
+                if (usuario.getCategoriasDeInteresse() != null &&
+                        !Collections.disjoint(usuario.getCategoriasDeInteresse(), item.getCategorias())) {
+                    recomendacoes.add(item);
+                }
+            }
+        }
+
+        // Ordenar as recomendações por algum critério (ex: popularidade, interesse, etc.)
+        // Aqui, estou apenas embaralhando a lista para fins de exemplo
+        Collections.shuffle(recomendacoes);
+
+        return recomendacoes;
+    }
 
     public static void main(String[] args) {
-    	SistemaBiblioteca sistema = new SistemaBiblioteca();
+    	SistemaBiblioteca sistema = SistemaBiblioteca.getInstance();
 
         // Populando o acervo com 3 objetos de cada tipo para teste (Requisito b)
         sistema.adicionarItem(new Livro("Livro 1", "Autor 1", 2000, true, 3));
