@@ -1,5 +1,8 @@
 package main.java;
 
+import java.util.HashSet;
+import java.util.Set;
+
 //Classe para CDs
 public class CD extends ItemBiblioteca implements Emprestavel {
     public CD(String titulo, String autor, int anoPublicacao, boolean emprestavel, int quantidadeExemplares) {
@@ -49,4 +52,13 @@ public class CD extends ItemBiblioteca implements Emprestavel {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	// Implementação do método abstrato getCategorias para CD
+    @Override
+    public Set<String> getCategorias() {
+        // Lógica para obter categorias específicas de CD
+        Set<String> categorias = new HashSet<>();
+        categorias.add("Música"); // Exemplo, substitua com suas categorias reais
+        return categorias;
+    }
 }
