@@ -11,6 +11,8 @@ public class Usuario {
     private static final int LIMITE_EMPRESTIMOS = 3;
     private static int proximoId = 1; // Contador para gerar IDs únicos
     private int id;
+    private String curso;
+    private List<String> categoriasDeInteresse;
     
     
     public Usuario(String nome) {
@@ -48,9 +50,27 @@ public class Usuario {
         this.nome = nome;
     }
     
+    public String getCurso() {
+        return curso;
+    }
+
+    public void setCurso(String curso) {
+        this.curso = curso;
+    }
+
+    public List<String> getCategoriasDeInteresse() {
+        return categoriasDeInteresse;
+    }
+
+    public void setCategoriasDeInteresse(List<String> categoriasDeInteresse) {
+        this.categoriasDeInteresse = categoriasDeInteresse;
+    }
+    
  // Método toString para representação textual do objeto
     @Override
     public String toString() {
         return "Usuario [nome=" + nome + ", itensEmprestados=" + itensEmprestados + "]";
     }
 }
+
+
